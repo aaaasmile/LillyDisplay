@@ -77,7 +77,7 @@ void Display_QRcode(int offset_x, int offset_y, int element_size, int QRsize, in
         }
       }
     }
-  } while (display.nextPage());  
+   } while (display.nextPage());  
 }
 
 void setup() {
@@ -92,10 +92,10 @@ void setup() {
 
 void loop() {
   if (g_textHasChanged) {
-    strncpy(g_Name, "Igor Sarzi Sartori", 25);
+    strncpy(g_Name, "Luz De Gan", 25);
     strncpy(g_Descr, "QR Green Pass", 25);
     //printName();
-    Display_QRcode(10,10,3,4,ECC_LOW,"https://invido.it/");
+    Display_QRcode(10,10,3,4,ECC_LOW,"https://stesosopra.blogspot.com/");
     g_textHasChanged = false;
   }
   delay(100);
