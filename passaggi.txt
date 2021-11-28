@@ -1,0 +1,19 @@
+# LilyGo display 
+Uso la scheda  di Lilygo 
+LILYGO® TTGO T5 V2.0 WiFi Wireless Module bluetooth Base ESP-32 ESP32 2.13 e-Paper
+comprata su https://www.banggood.com/
+
+Per settare questo progetto sono partito da un nuovo progetto in PlatformIO
+Poi ho aggiunto la library GxEPD2.
+
+Il sorgente sono partito dall'esempio che si trova su:
+https://github.com/ZinggJM/GxEPD2/tree/master/examples/GxEPD2_Example
+Ho dovuto cambiare il file GxEPD2_display_selection.h
+per selezionare il display necessario che è:
+GxEPD2_213_B74
+
+Ho avuto problemi a compilare Adafruit con questo errore:
+Adafruit_GrayOLED.h:30:32: fatal error: Adafruit_I2CDevice.h: No such file or directory
+Che ho risolto mettendo questa linea nel mio main.cpp (oltre ad includere arduino.h)
+#include <Adafruit_I2CDevice.h>
+Direi che questo progetto può essere usato per avere un display a modo, per esempio un qr code.
