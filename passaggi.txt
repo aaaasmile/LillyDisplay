@@ -17,3 +17,10 @@ Adafruit_GrayOLED.h:30:32: fatal error: Adafruit_I2CDevice.h: No such file or di
 Che ho risolto mettendo questa linea nel mio main.cpp (oltre ad includere arduino.h)
 #include <Adafruit_I2CDevice.h>
 Direi che questo progetto può essere usato per avere un display a modo, per esempio un qr code.
+
+## Display
+Il display che ho a dispozione è un epaper da 2.3" che ha queste dimensioni:
+display.epd2.WIDTH: 128, height: 128, width: 250
+La scritta "Hello World!" con il font mono ha questo getTextBounds
+Text bounds. tbx : 1, tby: -10, tbw: 127, tbh: 11
+
