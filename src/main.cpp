@@ -14,7 +14,7 @@
 #include "GxEPD2_display_selection_added.h"
 #include <qrcode.h> 
 #include "inidata.inc"
-#include "web.h"
+#include "WebServer.h"
 #include "predef.h"
 
 char g_Name[25] = "";

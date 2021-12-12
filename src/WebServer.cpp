@@ -1,4 +1,4 @@
-#include "web.h"
+#include "WebServer.h"
 
 #include <Arduino.h>
 #include <AsyncTCP.h>
@@ -6,11 +6,15 @@
 #include <WiFi.h>
 
 #include "predef.h"
+#include "LineDataUpdater.h"
+
+extern char g_Lines[][25];
+extern bool g_textHasChanged;
 
 const char *ssid = "Lilly-AP";
 const char *password = "123456789";  // password length is important
-
-//WiFiServer server(80);
+String g_Status;
+LineDataUpdater g_LineUpdater;
 AsyncWebServer server(80);
 
 const char index_html[] PROGMEM = R"rawliteral(
@@ -58,9 +62,7 @@ function httpPostChange ( theReq ){
 </script>
 )rawliteral";
 
-extern char g_Lines[][25];
 
-String g_Status;
 
 // Replaces placeholder with button section in your web page
 String processor(const String &var) {
@@ -82,21 +84,7 @@ String processor(const String &var) {
 }
 
 void onRequestNotFound(AsyncWebServerRequest *request) {
-  //Handle Unknown Request
   request->send(404, "File not found");
-}
-
-void onHandleBody(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
-  CONSOLEPF("onHandleBody");
-  if (!index) {
-    CONSOLEPF("BodyStart: %u B", total);
-  }
-  for (size_t i = 0; i < len; i++) {
-    CONSOLEWRITE(data[i]);
-  }
-  if (index + len == total) {
-    CONSOLEPF("BodyEnd: %u B", total);
-  }
 }
 
 MyWebServer::MyWebServer() {
@@ -110,8 +98,8 @@ void MyWebServer::Setup() {
   CONSOLEPF("AP IP address: %s", IP.toString().c_str());
   CONSOLEPF("Start AP: %s", ssid);
 
-  // Route for root / web page
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    g_Status = "";
     request->send_P(200, "text/html", index_html, processor);
   });
 
@@ -122,9 +110,17 @@ void MyWebServer::Setup() {
     for (int i = 0; i < params; i++) {
       AsyncWebParameter *p = request->getParam(i);
       CONSOLEPF("POST[%s]: %s", p->name().c_str(), p->value().c_str());
+      g_LineUpdater.AddLine(p->name().c_str(), p->value().c_str());
     }
-    g_Status = "Lines changed!";
-    request->redirect("/");
+    if (g_LineUpdater.IsChanged()){
+      g_LineUpdater.Commit();
+      g_textHasChanged = true;
+      g_Status = "Lines changed!";
+    }else{
+      g_Status = "";
+    }
+    
+    request->send_P(200, "text/html", index_html, processor);
   });
 
   server.on("/changeline", HTTP_GET, [](AsyncWebServerRequest *request) {
@@ -134,6 +130,5 @@ void MyWebServer::Setup() {
   });
 
   server.onNotFound(onRequestNotFound);
-  server.onRequestBody(onHandleBody);
   server.begin();
 }
