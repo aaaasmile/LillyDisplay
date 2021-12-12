@@ -8,7 +8,6 @@ class MyWebServer
 public:
     MyWebServer();
     void Setup();
-    void Update();
     
 };
 

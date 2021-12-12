@@ -31,3 +31,8 @@ Per vedere il significato di un QR code Covid:
 https://gir.st/blog/greenpass.html
 Documentazione del payload:
 https://ec.europa.eu/health/sites/default/files/ehealth/docs/covid-certificate_json_specification_en.pdf
+
+## Web Server
+Ho creato un access point per cambiare le linee di testo. Non sono riuscito a fare andare il server
+che ho usato nel player. Allora ho provato con questo e funziona alla grande:
+https://github.com/me-no-dev/ESPAsyncWebServer

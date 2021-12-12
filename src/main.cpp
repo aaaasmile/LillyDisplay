@@ -26,9 +26,7 @@ MyWebServer g_apServer;
 
 
 void printNameDescr() {
-#ifdef DEBUG
-  Serial.println("printName - begin");
-#endif
+  CONSOLEPF("printName - begin");
 
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
@@ -56,14 +54,13 @@ void printNameDescr() {
     display.print(g_Descr);
   } while (display.nextPage());
 
-#ifdef DEBUG
-  Serial.println("printName - end");
-#endif
+  CONSOLEPF("printName - end");
 }
 
 // Visit card is is 4 rows contact information + qr code for whatsup chatme
 // Tel number is on line 4
 void print_visit_card(){
+  CONSOLEPF("print_visit_card");
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
   display.setTextColor(GxEPD_BLACK);
@@ -149,8 +146,7 @@ void Display_QRcode(int offset_x, int offset_y, int element_size, int QRsize, in
 void setup() {
 #ifdef DEBUG  
   Serial.begin(115200);
-  Serial.println();
-  Serial.println("setup");
+  CONSOLEPF("setup");
 #endif
   delay(100);
   display.init(115200);
@@ -161,10 +157,9 @@ void setup() {
 
 void loop() {
   if (g_textHasChanged) {
+    CONSOLEPF("Text has been changed");
     print_visit_card();
     g_textHasChanged = false;
   }
   delay(100);
-
-  g_apServer.Update();
 }
