@@ -24,3 +24,10 @@ display.epd2.WIDTH: 128, height: 128, width: 250
 La scritta "Hello World!" con il font mono ha questo getTextBounds
 Text bounds. tbx : 1, tby: -10, tbw: 127, tbh: 11
 
+## QR
+Per vedere il contenuto di un qr code si usa:
+zbarimg --raw impf-qr-code.png
+Per vedere il significato di un QR code Covid:
+https://gir.st/blog/greenpass.html
+Documentazione del payload:
+https://ec.europa.eu/health/sites/default/files/ehealth/docs/covid-certificate_json_specification_en.pdf
