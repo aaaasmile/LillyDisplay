@@ -5,8 +5,8 @@
 #include <ESPAsyncWebServer.h>
 #include <WiFi.h>
 
-#include "predef.h"
 #include "LineDataUpdater.h"
+#include "predef.h"
 
 extern char g_Lines[][25];
 extern bool g_textHasChanged;
@@ -62,8 +62,6 @@ function httpPostChange ( theReq ){
 </script>
 )rawliteral";
 
-
-
 // Replaces placeholder with button section in your web page
 String processor(const String &var) {
   //Serial.println(var);
@@ -84,7 +82,7 @@ String processor(const String &var) {
 }
 
 void onRequestNotFound(AsyncWebServerRequest *request) {
-  request->send(404, "File not found");
+  request->send(404, "text/plain", "Not found");
 }
 
 MyWebServer::MyWebServer() {
@@ -97,6 +95,9 @@ void MyWebServer::Setup() {
   IPAddress IP = WiFi.softAPIP();
   CONSOLEPF("AP IP address: %s", IP.toString().c_str());
   CONSOLEPF("Start AP: %s", ssid);
+
+  g_LineUpdater.Setup();
+  g_LineUpdater.FetchLines();
 
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request) {
     g_Status = "";
@@ -112,14 +113,14 @@ void MyWebServer::Setup() {
       CONSOLEPF("POST[%s]: %s", p->name().c_str(), p->value().c_str());
       g_LineUpdater.AddLine(p->name().c_str(), p->value().c_str());
     }
-    if (g_LineUpdater.IsChanged()){
+    if (g_LineUpdater.IsChanged()) {
       g_LineUpdater.Commit();
       g_textHasChanged = true;
       g_Status = "Lines changed!";
-    }else{
+    } else {
       g_Status = "";
     }
-    
+
     request->send_P(200, "text/html", index_html, processor);
   });
 
