@@ -1,6 +1,8 @@
 #include <Adafruit_I2CDevice.h>
 #include <Arduino.h>
 
+
+
 #define ENABLE_GxEPD2_GFX 0
 
 #include <GxEPD2_3C.h>
@@ -12,19 +14,21 @@
 #include "GxEPD2_display_selection_added.h"
 #include <qrcode.h> 
 #include "inidata.inc"
+#include "web.h"
+#include "predef.h"
 
 char g_Name[25] = "";
 char g_Descr[25] = "";
-char g_Line1[25] = DATA_LN_1;
-char g_Line2[25] = DATA_LN_2;
-char g_Line3[25] = DATA_LN_3;
-char g_Line4[25] = DATA_LN_4;
+char g_Lines[][25] = {DATA_LN_1, DATA_LN_2, DATA_LN_3, DATA_LN_4, DATA_LN_5};
 bool g_textHasChanged = false;
 QRCode g_qrcode;
+MyWebServer g_apServer;
 
 
 void printNameDescr() {
+#ifdef DEBUG
   Serial.println("printName - begin");
+#endif
 
   display.setRotation(1);
   display.setFont(&FreeMonoBold9pt7b);
@@ -52,7 +56,9 @@ void printNameDescr() {
     display.print(g_Descr);
   } while (display.nextPage());
 
+#ifdef DEBUG
   Serial.println("printName - end");
+#endif
 }
 
 // Visit card is is 4 rows contact information + qr code for whatsup chatme
@@ -72,7 +78,7 @@ void print_visit_card(){
   int QRsize = 4;
   uint8_t qrcodeData[qrcode_getBufferSize(QRsize)];
   String message;
-  message =  "https://wa.me/" + String(g_Line4) + "?text=Hallo!";
+  message =  "https://wa.me/" + String(g_Lines[4]) + "?text=Hallo!";
   qrcode_initText(&g_qrcode, qrcodeData, QRsize, ECC_LOW, message.c_str());
 
   do {
@@ -91,17 +97,11 @@ void print_visit_card(){
       }
     }
 
-    display.setCursor(x, y);
-    display.print(g_Line1);
-    y += lineSTep;
-    display.setCursor(x, y);
-    display.print(g_Line2);
-    y += lineSTep;
-    display.setCursor(x, y);
-    display.print(g_Line3);
-    y += lineSTep;
-    display.setCursor(x, y);
-    display.print(g_Line4);
+    for (int i = 0; i < 5; i++){
+      display.setCursor(x, y);
+      display.print(g_Lines[i]);
+      y += lineSTep;
+    }
     
   }while (display.nextPage());  
 }
@@ -137,23 +137,26 @@ void Display_QRcode(int offset_x, int offset_y, int element_size, int QRsize, in
     display.setFont(&FreeMonoBold9pt7b);
     display.setTextColor(GxEPD_BLACK);
     display.setCursor(120, 31);
-    display.print(g_Line1);
+    display.print(g_Lines[0]);
     display.setCursor(120, 51);
-    display.print(g_Line2);
+    display.print(g_Lines[1]);
     display.setCursor(120, 71);
-    display.print(g_Line3);
+    display.print(g_Lines[2]);
 
    } while (display.nextPage());  
 }
 
 void setup() {
+#ifdef DEBUG  
   Serial.begin(115200);
   Serial.println();
   Serial.println("setup");
+#endif
   delay(100);
   display.init(115200);
   delay(1000);
   g_textHasChanged = true;
+  g_apServer.Setup();
 }
 
 void loop() {
@@ -162,4 +165,6 @@ void loop() {
     g_textHasChanged = false;
   }
   delay(100);
+
+  g_apServer.Update();
 }
