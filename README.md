@@ -7,4 +7,4 @@ I use it to print the Green Pass and also a visit card with a whatsup QR link.
 ![Device](https://github.com/aaaasmile/LillyDisplay/blob/main/doc/IMG_0634.JPG?raw=true)
 
 ## Compile
-Please copy the inidata.inc_template file to inidata.inc and change the data.
+Please copy the inidata.inc_template file into the file inidata.inc and change the data.
