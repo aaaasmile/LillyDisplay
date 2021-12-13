@@ -7,6 +7,7 @@
 
 #include "LineDataUpdater.h"
 #include "predef.h"
+#include "inidata.inc"
 
 extern char g_Lines[][25];
 extern bool g_textHasChanged;
@@ -47,17 +48,8 @@ const char index_html[] PROGMEM = R"rawliteral(
 </body>
 </html>
 <script>
-function httpPostChange ( theReq ){
-    var theUrl = "/?" + theReq + "&version=" + Math.random() ;
-    var xhr = new XMLHttpRequest() ;
-    xhr.onreadystatechange = function() {
-      if ( xhr.readyState == XMLHttpRequest.DONE )
-      {
-        resultstr.value = xhr.responseText ;
-      }
-    }
-    xhr.open ( "POST", theUrl, false ) ;
-    xhr.send() ;
+function getDefault ( ){
+    %DEFAULFN%
 }
 </script>
 )rawliteral";
@@ -68,15 +60,40 @@ String processor(const String &var) {
   if (var == "LINESPLACEHOLDER") {
     String app = "";
     app += "<h4>Zeilen</h4>";
-    app += "<form method='POST' action='/changeline'";
-    app += "<label class='textbox'>Line 1</label><input type='text' name='line1' value='" + String(g_Lines[0]) + "' id='ln1'>";
-    app += "  <br><input type=\"submit\" value=\"Submit\">";
+     app += "<p><button class='button' onclick='getDefault()'>Default</button></p>";
+    app += "<form method='POST' action='/changeline'>";
+    app += "<h4>Line 1</h4><label class='textbox'></label><input type='text' name='line1' value='" + String(g_Lines[0]) + "' id='ln1'>";
+    app += "<h4>Line 2</h4><label class='textbox'></label><input type='text' name='line2' value='" + String(g_Lines[1]) + "' id='ln2'>";
+    app += "<h4>Line 3</h4><label class='textbox'></label><input type='text' name='line3' value='" + String(g_Lines[2]) + "' id='ln3'>";
+    app += "<h4>Line 4</h4><label class='textbox'</label><input type='text' name='line4' value='" + String(g_Lines[3]) + "' id='ln4'>";
+    app += "<h4>Line 5</h4><label class='textbox'</label><input type='text' name='line5' value='" + String(g_Lines[4]) + "' id='ln5'>";
+    app += "  <p><input type=\"submit\" value=\"Submit\"></p>";
     app += "</form>";
+   
     return app;
   } else if (var == "STATUSPLACEHOLDER") {
     String status = "";
     status += "<div><span>" + g_Status + "</status></div>";
     return status;
+  } else if (var == "DEFAULFN") {
+    String fndef = "";
+    fndef += "const ln1 = '" + String(DATA_LN_1) + "';\n";
+    fndef += "const ln2 = '" + String(DATA_LN_2) + "';\n";
+    fndef += "const ln3 = '" + String(DATA_LN_3) + "';\n";
+    fndef += "const ln4 = '" + String(DATA_LN_4) + "';\n";
+    fndef += "const ln5 = '" + String(DATA_LN_5) + "';\n";
+    fndef += "let elem = document.getElementById('ln1');\n";
+    fndef += "elem.value = ln1;\n";
+    fndef += "elem = document.getElementById('ln2');\n";
+    fndef += "elem.value = ln2;\n";
+    fndef += "elem = document.getElementById('ln3');\n";
+    fndef += "elem.value = ln3;\n";
+    fndef += "elem = document.getElementById('ln4');\n";
+    fndef += "elem.value = ln4;\n";
+    fndef += "elem = document.getElementById('ln5');\n";
+    fndef += "elem.value = ln5;\n";
+    fndef += "console.log('Restore default values');\n";
+    return fndef;
   }
   return String();
 }

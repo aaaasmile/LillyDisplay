@@ -16,6 +16,10 @@ class LineDataUpdater {
   void logInternalState();
   void writeInMemory();
   String _line1;
+  String _line2;
+  String _line3;
+  String _line4;
+  String _line5;
 };
 
 #endif
