@@ -1,0 +1,9 @@
+#ifndef _INI_DATA_INCL_h
+#define _INI_DATA_INCL_h
+#define DATA_LN_1 "Luz De Gan"
+#define DATA_LN_2 "Pianto e stri"
+#define DATA_LN_3 "dore di denti"
+#define DATA_LN_4 "Breda"
+#define DATA_LN_5 "+436764516700" // always the Tel
+
+#endif

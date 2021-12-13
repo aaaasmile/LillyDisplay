@@ -5,3 +5,6 @@ The LillyGo is a ESP32 device with 2.3" epaper display.
 I use it to print the Green Pass and also a visit card with a whatsup QR link.
 
 ![Device](https://github.com/aaaasmile/LillyDisplay/blob/main/doc/IMG_0634.JPG?raw=true)
+
+## Compile
+Please copy the inidata.inc_template file to inidata.inc and change the data.
