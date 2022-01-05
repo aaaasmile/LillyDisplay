@@ -1,6 +1,7 @@
 {
   "files.associations": {
     "*.txt": "plaintext",
-    "functional": "cpp"
+    "functional": "cpp",
+    "*.inc": "cpp"
   }
 }
